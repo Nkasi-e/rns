@@ -26,7 +26,7 @@ class Security:
         s3_client = boto3.client('s3', REGION, aws_access_key_id = AWS_ACCESS_KEY, aws_secret_access_key = AWS_SECRET_KEY)
  
         try:
-           response = s3_client.upload_file(file_name=filename, Bucket=BUCKET_NAME, key=encrypted_data)
+           response = s3_client.put_object(Bucket=BUCKET_NAME, Key=filename, Body=encrypted_data)
         except ClientError as e:
             logging.error(e)
             return False
