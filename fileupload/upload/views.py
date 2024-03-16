@@ -44,6 +44,10 @@ class FileUpload(APIView):
 
 
         # store the encrypted file in S3 bucket
-        security.upload_to_s3( filename=file_content, encrypted_data=encrypted_file)
+        try:
 
-        return Response("File encrypted and uploaded to S3", status=status.HTTP_201_CREATED)
+            security.upload_to_s3( uploaded_file.name, encrypted_file)
+
+            return Response("File encrypted and uploaded to S3", status=status.HTTP_201_CREATED)
+        except Exception as e:
+            return Response({'error': str(e)}, status=500)
