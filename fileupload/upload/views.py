@@ -1,6 +1,4 @@
-from django.shortcuts import render
-
-# Create your views here.
+from datetime import datetime
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.views import APIView
 from rest_framework import status
@@ -35,9 +33,13 @@ class FileUpload(APIView):
         if not os.path.exists(save_directory):
             os.mkdir(save_directory)
 
-            encrypted_file_path = os.path.join(save_directory, uploaded_file.name + '.encrypted')
+            # Generate a unique fielname based on the time it was uploaded
+            timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+            encrypted_file_name = f'{uploaded_file.name}_{timestamp}.encrypted'
+
+            encrypted_file_path = os.path.join(save_directory, encrypted_file_name)
             
-            with open(encrypted_file_path, 'wb') as encrypted_data:
+            with open(encrypted_file_path, 'ab') as encrypted_data:
                 encrypted_data.write(encrypted_file)
 
 
